@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>A boldog számokról</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="style.css">
+    <style>
+    </style>
+</head>
+<body>
+    <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+        <div class="w3-display-topleft w3-padding-large w3-xlarge">
+            <div class="w3-bar">
+              <a th:href="@{/(year=${year-1})}" title='Előző év'>
+                  <button class="w3-button w3-black" th:text="'Előző év '+(${year}-1)"></button> <br />
+              </a>
+              <a th:href="@{/(year=${year+1})}" title='Következő év'>
+                  <button class="w3-button w3-black" th:text="'Következő év '+(${year}+1)"></button> <br />
+              </a>
+            </div>
+        </div>
+        <div class="w3-display-topright w3-padding-large w3-xlarge">
+            <form action="/" method="get">
+                <input name="year" type="number" min=1 class="w3-input w3-animate-input" placeholder="Évszám" style="width:250px" value="${year}">
+                <button type="submit" class="w3-button w3-black">Év keresése</button>
+            </form>
+        </div>
+        <div class="w3-display-middle">
+            <h1 class="w3-jumbo w3-animate-top"> Boldog új évet <span th:text="${year}"></span></h1>
+            <hr class="w3-border-grey" style="margin:auto;width:40%">
+            <p>
+            Vegyük a számunk számjegyeinek önmagukkal vett szorzatainak összegét. 
+            Az így kapott számmal tegyük ugyanezt. 
+            Ekkor egy harmadik számot kapunk, amire az eljárást megismételve egy negyediket, és így tovább. 
+            Vagyis a szabály segítségével képezhetünk egy számsorozatot. 
+            Ha a sorozat valamelyik tagja 1, akkor a kiinduló szám boldog. 
+            Ha sosem lesz 1, akkor boldogtalan.
+            </p>
+            <p>
+            Például: 2019 rákövetkezője 2*2 + 0*0 + 1*1 + 9*9 = 86. 86 rákövetkezője 8*8+
+            6*6 = 100. 100 rákövetkezője pedig 1, tehát 2019 egy <i>boldog szám</i>. <br>
+            2019 <span class="arrow"></span> 86 
+            <span class="arrow"></span> 100 <span class="arrow"></span> 1
+        </div>
+    </div>
+</body>
+</html>

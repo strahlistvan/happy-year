@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Boldog új évet - '+${year}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+        <div class="w3-display-topleft w3-padding-large w3-xlarge">
+            <div class="w3-bar">
+              <a th:href="@{/(year=${year-1})}" title='Előző év'>
+                  <button class="w3-button w3-black" th:text="'Előző év '+(${year}-1)"></button> <br />
+              </a>
+              <a th:href="@{/(year=${year+1})}" title='Következő év'>
+                  <button class="w3-button w3-black" th:text="'Következő év '+(${year}+1)"></button> <br />
+              </a>
+              <a th:href="@{/info}" title="Rövid ismertető a boldog számokról">
+                  <button class="w3-button w3-black">Boldog számok</button> <br />
+              </a>
+            </div>
+        </div>
+        <div class="w3-display-topright w3-padding-large w3-xlarge">
+            <form action="/" method="get">
+                <input name="year" type="number" min=1 class="w3-input w3-animate-input" placeholder="Évszám" style="width:250px" value="${year}">
+                <button type="submit" class="w3-button w3-black">Év keresése</button>
+            </form>
+        </div>
+        <div class="w3-display-middle">
+            <h1 class="w3-jumbo w3-animate-top"> Boldog új évet <span th:text="${year}"></span></h1>
+            <hr class="w3-border-grey" style="margin:auto;width:40%">
+            <div id="day_info">
+                <p> A jelenlegi dátum <span th:text="${#dates.format(#dates.createNow(), 'yyyy.MM.dd.')}"></span> </p>
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).FUTURE}">
+                    <span th:text="${year}"></span>
+                    Új Év napjáig 
+                    <span th:text="${days_until_new_year}"></span>
+                    nap van még hátra.
+                </p>
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PRESENT}">
+                    <span th:text="${year}"></span>
+                    a jelenlegi év, már  
+                    <span th:text="${days_until_new_year}"></span>
+                    napja tart.
+                </p>
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PAST}">
+                    <span th:text="${year}"></span>
+                    utolsó napja már
+                    <span th:text="${days_until_new_year}"></span>
+                    napja elmúlt.
+                </p>
+            </div>
+            <h2> Milyen év a <span th:text="${year}"></span>? </h2>
+            <div id="happy_unhappy">
+              A <span th:text="${year}"></span> év 
+                <span th:if="${is_happy_year}">
+                    Boldog év! Hurrá! Ugyanis a hozzá tartozó lánc egyre végződik: 
+                  <span th:each="number: ${chain}">
+                    <span th:text="${number}"></span>
+                    <span class="arrow"></span>
+                  </span>
+                  1 <span class="arrow"></span> 1 <span class="arrow"></span> ...
+                </span>
+                <span th:unless="${is_happy_year}">
+                    boldogtalan év. A hozzá tartozó lánc ugyanis ciklusba fut, sosem lesz egy: 
+                    <span th:each="number: ${chain}">
+                        <span th:text="${number}"></span>
+                        <span class="arrow"></span>
+                    </span>
+                    145 <span class="arrow"></span> 42 <span class="arrow"></span> 20 <span class="arrow"></span> 4 <span class="arrow"></span>
+                    16 <span class="arrow"></span> 37 <span class="arrow"></span> 58 <span class="arrow"></span> 89 <span class="arrow"></span> ...
+                </span>
+                </p>
+            </div>
+            <div id="optimist" th:if="${!is_happy_year}">
+                <h2> Optimista változat: </h2>
+                <p>
+                    <span th:text="${year}+' = '+${year}/${biggest_happy_divider}+' * '+${biggest_happy_divider}"></span>
+                </p>
+                <p>
+                  <span th:text="${biggest_happy_divider}"></span> pedig boldog szám, ugyanis a hozzátartozó lánc: 
+                  <span th:each="number: ${optimist_chain}">
+                    <span th:text="${number}"></span>
+                    <span class="arrow"></span>
+                  </span>
+                  1 <span class="arrow"></span> 1 <span class="arrow"></span> ...
+               </p>
+               <p>Vagyis a <span th:text="${year}"></span> év <i>többszörösen</i> boldog év! </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
