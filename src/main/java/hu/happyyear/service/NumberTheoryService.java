@@ -1,6 +1,7 @@
 package hu.happyyear.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -39,7 +40,6 @@ public class NumberTheoryService {
             if (number%divider == 0) {
                 number/=divider;
                 primeFactors.add(divider);
-                
             }
             else {
                 ++divider;
@@ -78,5 +78,57 @@ public class NumberTheoryService {
             }
         }
         return biggestHappyDivider;
+    }
+
+    private void removeEveryNth(Integer stepSize, List<Integer> list) {
+        Iterator<Integer> iterator = list.iterator();
+        while( iterator.hasNext() ){
+            for (int k=0; k<stepSize; ++k) {
+                if (iterator.hasNext()) {
+                    iterator.next();
+                }
+            }
+            iterator.remove();
+        }
+    }
+
+    public List<Integer> getLuckyNumbers(Integer limit) {
+        List<Integer> luckyNumbers = new ArrayList<Integer>();
+        for (int i=1; i<=limit; i+=2) {
+            luckyNumbers.add(i);
+        }
+        for (int n=1; n<luckyNumbers.size()/2; ++n) {
+            removeEveryNth(luckyNumbers.get(n), luckyNumbers);
+        }
+        return luckyNumbers;
+    }
+    
+    public Boolean isLuckyNumber(Integer number) {
+        List<Integer> luckyNumbers = getLuckyNumbers(2*number);
+        System.out.println(number);
+        System.out.println(luckyNumbers);
+        return luckyNumbers.indexOf(number) != -1;
+    }
+    
+    public Integer getNextLuckyNumber(Integer number) {
+        List<Integer> luckyNumbers = getLuckyNumbers(2*number);
+        if (isLuckyNumber(number)) {
+            return luckyNumbers.get(luckyNumbers.indexOf(number) + 1);
+        }
+        
+        int i;
+        for (i=0; luckyNumbers.get(i) < number; ++i);
+        return luckyNumbers.get(i);
+    }
+    
+    public Integer getPrevLuckyNumber(Integer number) {
+        List<Integer> luckyNumbers = getLuckyNumbers(2*number);
+        if (isLuckyNumber(number)) {
+            return luckyNumbers.get(luckyNumbers.indexOf(number) + 1);
+        }
+
+        int i;
+        for (i=0; luckyNumbers.get(i) < number; ++i);
+        return luckyNumbers.get(i-1);
     }
 }

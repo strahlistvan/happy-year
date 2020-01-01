@@ -15,17 +15,17 @@
         <div class="w3-display-topleft w3-padding-large w3-xlarge">
             <div class="w3-bar">
               <a th:href="@{/(year=${year-1})}" title='Előző év'>
-                  <button class="w3-button w3-black" th:text="'Előző év '+(${year}-1)"></button> <br />
+                  <button class="w3-button w3-black" th:text="${year}-1"></button> <br />
               </a>
               <a th:href="@{/(year=${year+1})}" title='Következő év'>
-                  <button class="w3-button w3-black" th:text="'Következő év '+(${year}+1)"></button> <br />
+                  <button class="w3-button w3-black" th:text="${year}+1"></button> <br />
               </a>
             </div>
         </div>
         <div class="w3-display-topright w3-padding-large w3-xlarge">
             <form action="/" method="get">
                 <input name="year" type="number" min=1 class="w3-input w3-animate-input" placeholder="Évszám" style="width:250px" value="${year}">
-                <button type="submit" class="w3-button w3-black">Év keresése</button>
+                <button type="submit" class="w3-button w3-black">Keresés</button>
             </form>
         </div>
         <div class="w3-display-middle">

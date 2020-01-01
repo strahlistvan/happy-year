@@ -22,8 +22,11 @@ public class MainController {
     private Model getModelByYear(Model model, Integer year) {
         Boolean isHappyYear = numService.isHappyNumber(year);
         model.addAttribute("year", year);
-        model.addAttribute("days_until_new_year", dateService.daysUntilYear(year));
+        model.addAttribute("days_until_year", dateService.daysUntilYear(year));
         model.addAttribute("is_happy_year", isHappyYear);
+        model.addAttribute("is_lucky_year", numService.isLuckyNumber(year));
+        model.addAttribute("prev_lucky", numService.getPrevLuckyNumber(year));
+        model.addAttribute("next_lucky", numService.getNextLuckyNumber(year));
         model.addAttribute("chain", numService.getChain(year));
         Integer biggestHappyDivider =  numService.getBiggestHappyDivider(year);
         model.addAttribute("biggest_happy_divider", biggestHappyDivider);
@@ -36,6 +39,7 @@ public class MainController {
     public String mainPage(Model model, @RequestParam(name="year", required=false) Integer year) {
         Integer nextYear = year == null ? dateService.getNextYear() : year;
         model = getModelByYear(model, nextYear);
+        numService.getLuckyNumbers(2020);
         return "main";
     }
 

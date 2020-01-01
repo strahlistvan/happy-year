@@ -13,10 +13,10 @@
         <div class="w3-display-topleft w3-padding-large w3-xlarge">
             <div class="w3-bar">
               <a th:href="@{/(year=${year-1})}" title='Előző év'>
-                  <button class="w3-button w3-black" th:text="'Előző év '+(${year}-1)"></button> <br />
+                  <button class="w3-button w3-black" th:text="${year}-1"></button> <br />
               </a>
               <a th:href="@{/(year=${year+1})}" title='Következő év'>
-                  <button class="w3-button w3-black" th:text="'Következő év '+(${year}+1)"></button> <br />
+                  <button class="w3-button w3-black" th:text="${year}+1"></button> <br />
               </a>
               <a th:href="@{/info}" title="Rövid ismertető a boldog számokról">
                   <button class="w3-button w3-black">Boldog számok</button> <br />
@@ -26,7 +26,7 @@
         <div class="w3-display-topright w3-padding-large w3-xlarge">
             <form action="/" method="get">
                 <input name="year" type="number" min=1 class="w3-input w3-animate-input" placeholder="Évszám" style="width:250px" value="${year}">
-                <button type="submit" class="w3-button w3-black">Év keresése</button>
+                <button type="submit" class="w3-button w3-black">Keresés</button>
             </form>
         </div>
         <div class="w3-display-middle">
@@ -37,19 +37,19 @@
                 <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).FUTURE}">
                     <span th:text="${year}"></span>
                     Új Év napjáig 
-                    <span th:text="${days_until_new_year}"></span>
+                    <span th:text="${days_until_year}"></span>
                     nap van még hátra.
                 </p>
                 <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PRESENT}">
                     <span th:text="${year}"></span>
-                    a jelenlegi év, már  
-                    <span th:text="${days_until_new_year}"></span>
+                    a jelenlegi év, már 
+                    <span th:text="${days_until_year}"></span>
                     napja tart.
                 </p>
                 <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PAST}">
                     <span th:text="${year}"></span>
                     utolsó napja már
-                    <span th:text="${days_until_new_year}"></span>
+                    <span th:text="${days_until_year}"></span>
                     napja elmúlt.
                 </p>
             </div>
@@ -73,6 +73,16 @@
                     145 <span class="arrow"></span> 42 <span class="arrow"></span> 20 <span class="arrow"></span> 4 <span class="arrow"></span>
                     16 <span class="arrow"></span> 37 <span class="arrow"></span> 58 <span class="arrow"></span> 89 <span class="arrow"></span> ...
                 </span>
+                </p>
+                <p>
+                  A <span th:text="${year}"></span> év 
+                    <span th:if="${is_lucky_year}">
+                        szerencsés év! Hurrá!
+                    </span>
+                    <span th:unless="${is_lucky_year}">
+                        nem szerencsés év. <br />
+                   Előző szerencsés szám: <span th:text='${prev_lucky}'></span> <br />
+                   Következő szerencsés szám: <span th:text='${next_lucky}'></span>
                 </p>
             </div>
             <div id="optimist" th:if="${!is_happy_year}">
