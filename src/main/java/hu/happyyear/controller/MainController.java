@@ -32,6 +32,8 @@ public class MainController {
         model.addAttribute("biggest_happy_divider", biggestHappyDivider);
         model.addAttribute("optimist_chain", numService.getChain(biggestHappyDivider));
         model.addAttribute("tense", dateService.getYearTense(year));
+        model.addAttribute("divisor_sum", numService.getProperDivisorSum(year));
+        model.addAttribute("divisor_state", numService.getDivisorState(year));
         return model;
     }
 

@@ -3,11 +3,12 @@ package hu.happyyear.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 @Service
 public class NumberTheoryService {
+
+    public static enum DivisorState { DEFICIENT, ABUNDANT, PERFECT };
 
     private int getSumOfDigitSquare(int num) {
         int sum = 0;
@@ -58,7 +59,7 @@ public class NumberTheoryService {
         return dividers;
     }
     
-    public Integer getBiggestHappyFactor(Integer number) {
+    public Integer getBiggestHappyPrimeFactor(Integer number) {
         List<Integer> primeFactors = getPrimeFactors(number);
         Integer biggestHappyFactor = 1;
         for (Integer fact: primeFactors) {
@@ -102,25 +103,23 @@ public class NumberTheoryService {
         }
         return luckyNumbers;
     }
-    
+
     public Boolean isLuckyNumber(Integer number) {
         List<Integer> luckyNumbers = getLuckyNumbers(2*number);
-        System.out.println(number);
-        System.out.println(luckyNumbers);
         return luckyNumbers.indexOf(number) != -1;
     }
-    
+
     public Integer getNextLuckyNumber(Integer number) {
         List<Integer> luckyNumbers = getLuckyNumbers(2*number);
         if (isLuckyNumber(number)) {
             return luckyNumbers.get(luckyNumbers.indexOf(number) + 1);
         }
-        
+
         int i;
         for (i=0; luckyNumbers.get(i) < number; ++i);
         return luckyNumbers.get(i);
     }
-    
+
     public Integer getPrevLuckyNumber(Integer number) {
         List<Integer> luckyNumbers = getLuckyNumbers(2*number);
         if (isLuckyNumber(number)) {
@@ -130,5 +129,21 @@ public class NumberTheoryService {
         int i;
         for (i=0; luckyNumbers.get(i) < number; ++i);
         return luckyNumbers.get(i-1);
+    }
+
+    public Integer getProperDivisorSum(Integer number) {
+        List<Integer> dividers = getDividers(number);
+        return dividers.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public DivisorState getDivisorState(Integer number) {
+        Integer divSum = getProperDivisorSum(number);
+        if (divSum < number) {
+            return DivisorState.DEFICIENT;
+        }
+        if (divSum > number) {
+            return DivisorState.ABUNDANT;
+        }
+        return DivisorState.PERFECT;
     }
 }

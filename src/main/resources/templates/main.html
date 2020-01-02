@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Boldog új évet - '+${year}"></title>
+    <title th:text="' A '+${year}+' évről'"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -30,23 +30,23 @@
             </form>
         </div>
         <div class="w3-display-middle">
-            <h1 class="w3-jumbo w3-animate-top"> Boldog új évet <span th:text="${year}"></span></h1>
+            <h1 class="w3-xxxlarge w3-animate-top">Információk a <span th:text="${year}"> </span> évről</h1>
             <hr class="w3-border-grey" style="margin:auto;width:40%">
             <div id="day_info">
                 <p> A jelenlegi dátum <span th:text="${#dates.format(#dates.createNow(), 'yyyy.MM.dd.')}"></span> </p>
-                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).FUTURE}">
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TimeTense).FUTURE}">
                     <span th:text="${year}"></span>
                     Új Év napjáig 
                     <span th:text="${days_until_year}"></span>
                     nap van még hátra.
                 </p>
-                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PRESENT}">
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TimeTense).PRESENT}">
                     <span th:text="${year}"></span>
                     a jelenlegi év, már 
                     <span th:text="${days_until_year}"></span>
                     napja tart.
                 </p>
-                <p th:if="${tense == T(hu.happyyear.service.DateService.TIME_TENSE).PAST}">
+                <p th:if="${tense == T(hu.happyyear.service.DateService.TimeTense).PAST}">
                     <span th:text="${year}"></span>
                     utolsó napja már
                     <span th:text="${days_until_year}"></span>
@@ -73,31 +73,39 @@
                     145 <span class="arrow"></span> 42 <span class="arrow"></span> 20 <span class="arrow"></span> 4 <span class="arrow"></span>
                     16 <span class="arrow"></span> 37 <span class="arrow"></span> 58 <span class="arrow"></span> 89 <span class="arrow"></span> ...
                 </span>
-                </p>
                 <p>
                   A <span th:text="${year}"></span> év 
                     <span th:if="${is_lucky_year}">
                         szerencsés év! Hurrá!
                     </span>
                     <span th:unless="${is_lucky_year}">
-                        nem szerencsés év. <br />
-                   Előző szerencsés szám: <span th:text='${prev_lucky}'></span> <br />
-                   Következő szerencsés szám: <span th:text='${next_lucky}'></span>
+                        nem szerencsés év. 
+                   Előző: <a th:href="@{/(year=${prev_lucky})}"><span th:text='${prev_lucky}'></span></a>
+                   Következő: <a th:href="@{/(year=${next_lucky})}"><span th:text='${next_lucky}'></span></a>
+                </p>
+                <p th:if="${divisor_state == T(hu.happyyear.service.NumberTheoryService.DivisorState).PERFECT}">
+                  A <span th:text="${year}"></span> év tökéletes! Hurrá! Valódi osztóinak összege megegyezik önmagával!
+                </p>
+                <p th:if="${divisor_state == T(hu.happyyear.service.NumberTheoryService.DivisorState).DEFICIENT}">
+                  A <span th:text="${year}"></span> év szűkölködő. Valódi osztóinak összege <span th:text="${divisor_sum}"></span>,
+                  ami kevesebb, mint maga a szám.
+                </p>
+                <p th:if="${divisor_state == T(hu.happyyear.service.NumberTheoryService.DivisorState).ABUNDANT}">
+                  A <span th:text="${year}"></span> év bővelkedő. Valódi osztóinak összege <span th:text="${divisor_sum}"></span>,
+                  ami több, mint maga a szám.
                 </p>
             </div>
-            <div id="optimist" th:if="${!is_happy_year}">
-                <h2> Optimista változat: </h2>
+            <div id="optimist" th:if="${!is_happy_year and biggest_happy_divider != 1}">
+                <h3> Optimista változat: </h3>
                 <p>
                     <span th:text="${year}+' = '+${year}/${biggest_happy_divider}+' * '+${biggest_happy_divider}"></span>
+                    , a <span th:text="${biggest_happy_divider}"></span> pedig boldog szám, ugyanis a hozzátartozó lánc: 
+                      <span th:each="number: ${optimist_chain}">
+                        <span th:text="${number}"></span>
+                        <span class="arrow"></span>
+                      </span>
+                      1 <span class="arrow"></span> 1 <span class="arrow"></span> ...
                 </p>
-                <p>
-                  <span th:text="${biggest_happy_divider}"></span> pedig boldog szám, ugyanis a hozzátartozó lánc: 
-                  <span th:each="number: ${optimist_chain}">
-                    <span th:text="${number}"></span>
-                    <span class="arrow"></span>
-                  </span>
-                  1 <span class="arrow"></span> 1 <span class="arrow"></span> ...
-               </p>
                <p>Vagyis a <span th:text="${year}"></span> év <i>többszörösen</i> boldog év! </p>
             </div>
         </div>
